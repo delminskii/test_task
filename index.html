@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Task</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
+    <style>
+        form {
+            display: none;
+        } 
+
+        .cancelButton {
+            float: left;
+            margin-left: 400px;
+        }
+
+        .saveButton {
+            float: right;
+            margin-right: 400px;
+        }
+
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <form id="newActionForm" action="">
+        <fieldset>
+            <legend>New Task</legend>
+            <h5>Bidder Name</h5>
+            <div id="newBidder"></div>
+            <hr>
+            <h5>Time (HH:mm:ss)</h5>
+            <div id="newTime">
+                <!-- TODO?: type attr could be datetime-->
+                <input type="text" placeholder="14:10:00">
+            </div>
+            <hr>
+            <h5>Status</h5>
+            <div id="newStatus"></div>
+            <hr>
+            <h5>Action</h5>
+            <div id="newAction"></div>
+            <div>
+                <button type="button" id="cancelNewActionBtn" class="cancelButton">Cancel</button>
+                <button type="button" id="saveNewActionBtn" class="saveButton">Save</button>
+                <div class="clear"></div>
+            </div>
+        </fieldset>
+    </form>
+
+    <div id="fullCalendar"></div>
+    <script>
+        // variables here    
+        var $calendar = $('#fullCalendar');
+
+        $(document).ready(function() {
+            // init state 
+            $.get({
+                url: '/api/init',
+                dataType: 'json',
+                success: response => {
+                    $calendar.fullCalendar({
+                        header: { center: 'title' },
+                        eventLimit: true,
+                        events: response.data.map(x => {
+                            return {
+                                title: `${x.Action} by ${x.FirstName} ${x.LastName}`,
+                                start: moment.unix(x.Date).format("YYYY-MM-DD HH:mm:ss")
+                            }
+                        }),
+
+                        dayClick: function(date, jsEvent, view) {
+                            // when a cell was clicked, a `NewAction` form
+                            // appears with the predefined data;
+                            // bidders
+                            $.get({
+                                url: '/api/bidders',
+                                dataType: 'json',
+                                success: response => {
+                                    var $select = $('<select name="bidderId">');
+                                    response.data
+                                        .forEach((x, i) => { 
+                                            var $option = $('<option>', {
+                                                value: x.id,
+                                                text: x.FullName
+                                            });
+                                            if (i === 0) {
+                                                $option.prop('selected', 'selected');
+                                            }
+                                            $select.append($option);
+                                        });
+
+                                    var $newBidderDiv = $('#newBidder');
+                                    $newBidderDiv.empty();
+                                    $newBidderDiv.append($select);
+                                }
+                            });
+
+                            // statuses
+                            $.get({
+                                url: '/api/statuses',
+                                dataType: 'json',
+                                success: response => {
+                                    var $select = $('<select name="statusId">');
+                                    response.data
+                                        .forEach((x, i) => { 
+                                            var $option = $('<option>', {
+                                                value: x.id,
+                                                text: x.value
+                                            });
+                                            if (i === 0) {
+                                                $option.prop('selected', 'selected');
+                                            }
+                                            $select.append($option);
+                                        });
+                                    var $newStatusDiv = $('#newStatus');
+                                    $newStatusDiv.empty();
+                                    $newStatusDiv.append($select);
+                                }
+                            });
+
+                            // actions
+                            $.get({
+                                url: '/api/actions',
+                                dataType: 'json',
+                                success: response => {
+                                    var $select = $('<select name="actionId">');
+                                    response.data
+                                        .forEach((x, i) => { 
+                                            var $option = $('<option>', {
+                                                value: x.id,
+                                                text: x.value
+                                            });
+                                            if (i === 0) {
+                                                $option.prop('selected', 'selected');
+                                            }
+                                            $select.append($option);
+                                        });
+                                    var $newActionDiv = $('#newAction');
+                                    $newActionDiv.empty();
+                                    $newActionDiv.append($select);
+                                }
+                            });
+
+                            $('#newActionForm').toggle();
+                        },
+
+                        eventClick: function(event, jsEvent, view) {
+                            // want to edit some bid
+                        }
+                    });
+                }
+            });
+
+            // toggling form
+            $('#cancelNewActionBtn').click(() => {
+                $('#newActionForm').toggle();
+            });
+
+        });
+
+    </script>
+</body>
+</html>
