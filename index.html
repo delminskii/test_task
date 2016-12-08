@@ -37,7 +37,7 @@
             <h5>Time (HH:mm:ss)</h5>
             <div id="newTime">
                 <!-- TODO?: type attr could be datetime-->
-                <input type="text" placeholder="14:10:00">
+                <input name="time" type="text" placeholder="14:10:00">
             </div>
             <hr>
             <h5>Status</h5>
@@ -158,8 +158,25 @@
             });
 
             // toggling form
+            var $newActionForm = $('#newActionForm');
             $('#cancelNewActionBtn').click(() => {
-                $('#newActionForm').toggle();
+                $newActionForm.toggle();
+            });
+
+            // saving newAction data
+            $('#saveNewActionBtn').click(() => {
+                var data = {};
+                $newActionForm.serializeArray().forEach(x => {
+                    data[x.name] = x.value;
+                });
+                $.post({
+                    url: '/api/test',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    success: respnse => {
+                        console.log(response);
+                    }
+                })
             });
 
         });

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-,
 import json
-import re
 import api_get_defs
 import api_post_defs
 
@@ -16,7 +15,7 @@ ROUTER = {
     },
 
     'POST': {
-
+        '/api/test': api_post_defs.test_handler
     }
 }
 
@@ -25,14 +24,16 @@ def api_get(out_headers, path):
     """api route for GET requests
 
     :param out_headers: dict(status_code, content_type)
+    :param path: str; point access as an url
     """
-    try:
-        if not any(re.match(key.strip(), path.strip(), re.I)
-                   for key in ROUTER['GET'].iterkeys()):
-            raise ValueError
-        return ROUTER['GET'][path](out_headers)
-    except (KeyError, ValueError):
-        pass
+    matched = filter(lambda key: path.startswith(key),
+                     ROUTER['GET'].iterkeys())
+    if matched:
+        route_key = matched[0]
+        try:
+            return ROUTER['GET'][route_key](out_headers)
+        except KeyError:
+            pass
 
     out_headers['status_code'] = 404
     return json.dumps({
@@ -40,10 +41,23 @@ def api_get(out_headers, path):
     })
 
 
-def api_post(out_headers, path):
+def api_post(out_headers, path, data):
     """api route for POST requests
 
     :param out_headers: dict(status_code, content_type)
+    :param path: str; point access as an url
+    :param data: str; point access as an url
     """
-    # TODO
-    pass
+    matched = filter(lambda key: path.startswith(key),
+                     ROUTER['POST'].iterkeys())
+    if matched:
+        route_key = matched[0]
+        try:
+            return ROUTER['POST'][route_key](out_headers, data)
+        except KeyError:
+            pass
+
+    out_headers['status_code'] = 404
+    return json.dumps({
+        'status': 'ERROR'
+    })

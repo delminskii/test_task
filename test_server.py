@@ -35,13 +35,14 @@ class CustomRequestHandler(BaseHTTPRequestHandler):
         with open('./index.html', 'r') as fp:
             content = fp.read()
 
-        # to debug
+        # for test purposes
         print 'PAAAAAAATH:', self.path
 
         if self.path in routes.ROOTS:
             # return index page (see above)
             pass
-        elif self.path in routes.ROUTER['GET'].iterkeys():
+        elif any(self.path.startswith(key)
+                 for key in routes.ROUTER['GET'].iterkeys()):
             headers['content_type'] = 'application/json'
             content = routes.api_get(headers, self.path)
         else:
@@ -59,8 +60,11 @@ class CustomRequestHandler(BaseHTTPRequestHandler):
             'content_type': 'application/json'
         }
         content = None
-        if self.path in routes.ROUTER.iterkeys():
-            content = routes.api_post(headers, self.path)
+        if any(self.path.startswith(key)
+               for key in routes.ROUTER['POST'].iterkeys()):
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            content = routes.api_post(headers, self.path, post_data)
         else:
             headers['status_code'] = 404
             content = json.dumps({'status': 'ERROR'})
