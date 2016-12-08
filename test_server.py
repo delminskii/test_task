@@ -35,7 +35,9 @@ class CustomRequestHandler(BaseHTTPRequestHandler):
         with open('./index.html', 'r') as fp:
             content = fp.read()
 
+        # to debug
         print 'PAAAAAAATH:', self.path
+
         if self.path in routes.ROOTS:
             # return index page (see above)
             pass

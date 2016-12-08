@@ -9,10 +9,10 @@ ROOTS = ('/', '/index', '/index.html', )
 ROUTER = {
     'GET': {
         '/api/test':      api_get_defs.test_handler,
-        '/api/statuses$':  api_get_defs.statuses,
-        '/api/bidders$':   api_get_defs.bidders,
-        '/api/actions$':   api_get_defs.actions,
-        '/api/init$':      api_get_defs.init,
+        '/api/statuses':  api_get_defs.statuses,
+        '/api/bidders':   api_get_defs.bidders,
+        '/api/actions':   api_get_defs.actions,
+        '/api/init':      api_get_defs.init,
     },
 
     'POST': {
@@ -27,7 +27,8 @@ def api_get(out_headers, path):
     :param out_headers: dict(status_code, content_type)
     """
     try:
-        if not any(re.match(key, path, re.I | re.M | re.U) for key in ROUTER['GET'].iterkeys()):
+        if not any(re.match(key.strip(), path.strip(), re.I)
+                   for key in ROUTER['GET'].iterkeys()):
             raise ValueError
         return ROUTER['GET'][path](out_headers)
     except (KeyError, ValueError):

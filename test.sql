@@ -95,7 +95,7 @@ INSERT INTO Bidder(firstname, lastname) VALUES('Alice', 'Doe');
 
 -- Bids
 INSERT INTO Bid(ts, id_Status, id_Action) VALUES('2016-12-05 10:20:00', 1, 1);
-INSERT INTO Bid(ts, id_Status, id_Action) VALUES('2016-12-06 10:20:00', 2, 2);
+INSERT INTO Bid(ts, id_Status, id_Action) VALUES('2016-12-06 10:30:00', 2, 2);
 INSERT INTO Bid(ts, id_Status, id_Action) VALUES('2016-12-05 10:20:00', 2, 2);
 
 -- BiddingMaps
