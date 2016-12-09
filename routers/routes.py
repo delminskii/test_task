@@ -15,8 +15,8 @@ ROUTER = {
     },
 
     'POST': {
-        '/api/test': api_post_defs.test_handler,
-        '/api/newaction': api_post_defs.new_action
+        '/api/test':       api_post_defs.test_handler,
+        '/api/newaction':  api_post_defs.new_action
     }
 }
 
