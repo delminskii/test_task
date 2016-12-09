@@ -22,6 +22,6 @@
 ----
 ##запуск
 > в терминале (от `root`)
-> `#: python test_server` запустит веб-сервер на locahost:<port>, значение порта в конфиге
+> `#: python test_server.py` запустит веб-сервер на locahost:<port>, значение порта в конфиге
 
 http://localhost:80/
