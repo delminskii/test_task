@@ -59,6 +59,10 @@ class CustomRequestHandler(BaseHTTPRequestHandler):
             'status_code': 200,
             'content_type': 'application/json'
         }
+
+        # for test purposes
+        print 'PAAAAAAATH:', self.path
+
         content = None
         if any(self.path.startswith(key)
                for key in routes.ROUTER['POST'].iterkeys()):

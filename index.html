@@ -147,11 +147,35 @@
                                 }
                             });
 
+
+                            $(this).css('background-color', '#ccff99');
                             $('#newActionForm').toggle();
+
+                            // saving newAction data
+                            $('#saveNewActionBtn').click(() => {
+                                var data = {};
+                                $newActionForm.serializeArray().forEach(x => {
+                                    data[x.name] = x.value;
+                                });
+                                data.ts = date.add(data.time).unix();
+                                delete data.time;
+                                $.post({
+                                    url: '/api/newaction',
+                                    dataType: 'json',
+                                    data: JSON.stringify(data),
+                                    success: response => {
+                                        window.location.reload();
+                                    }
+                                });
+
+                                $(this).css('background-color', '#ccff99');
+                                $newActionForm.toggle();
+                            });
+
                         },
 
                         eventClick: function(event, jsEvent, view) {
-                            // want to edit some bid
+                            // want to edit some bid (ticket inside of a day)
                         }
                     });
                 }
@@ -160,23 +184,8 @@
             // toggling form
             var $newActionForm = $('#newActionForm');
             $('#cancelNewActionBtn').click(() => {
+                // TODO: add a handle toggling cell's color
                 $newActionForm.toggle();
-            });
-
-            // saving newAction data
-            $('#saveNewActionBtn').click(() => {
-                var data = {};
-                $newActionForm.serializeArray().forEach(x => {
-                    data[x.name] = x.value;
-                });
-                $.post({
-                    url: '/api/test',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    success: respnse => {
-                        console.log(response);
-                    }
-                })
             });
 
         });
