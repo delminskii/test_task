@@ -10,7 +10,6 @@ def test_handler(out_headers, post_data):
     :param out_headers: header(content_type, status_code)
     :param post_data: the data passed via POST
     """
-    print json.dumps(post_data)
     data_dict = dict()
     try:
         data_dict = json.loads(post_data)

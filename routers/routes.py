@@ -47,7 +47,7 @@ def api_post(out_headers, path, data):
 
     :param out_headers: dict(status_code, content_type)
     :param path: str; point access as an url
-    :param data: str; point access as an url
+    :param data: str; the data passed via POST
     """
     matched = filter(lambda key: path.startswith(key),
                      ROUTER['POST'].iterkeys())
