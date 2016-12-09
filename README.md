@@ -12,16 +12,16 @@
 
 ----
 ##скормите установку бд и таблиц (от `root`):
-`#: mysql -u root -p < test.sql`,
+> `#: mysql -u root -p < test.sql`,
 введите пароль для администратора бд
 
 ----
 ##настройки
-Хрнятся в `config.json`, настройки для `mysql` predefined.
+> Хранятся в `config.json`, настройки для `mysql` predefined.
 
 ----
 ##запуск
-в терминале (от `root`)
-`#: python test_server` запустит веб-сервер на locahost:<port>, значение порта в конфиге
+> в терминале (от `root`)
+> `#: python test_server` запустит веб-сервер на locahost:<port>, значение порта в конфиге
 
 http://localhost:80/
