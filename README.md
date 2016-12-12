@@ -7,8 +7,8 @@
 #Шаги:
 ----
 ##db
-> `sudo yum install MySQL-python` (deb-based) OR
-> `sudo apt-get install MySQL-python` (rpm-based)
+> `sudo yum install MySQL-python` (rpm-based) OR
+> `sudo apt-get install MySQL-python` (deb-based)
 
 ----
 ##скормите установку бд и таблиц (от `root`):
